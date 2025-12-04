@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discord Webhook Messenger</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f9;
+            margin: 0;
+        }
+        .container {
+            text-align: center;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        textarea {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            resize: none;
+            height: 100px;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .response {
+            margin-top: 10px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Send a Message to Discord</h1>
+        <textarea id="message" placeholder="Type your message here..."></textarea>
+        <br>
+        <button onclick="sendMessage()">Send</button>
+        <p class="response" id="response"></p>
+    </div>
+
+    <script>
+        const webhookUrl = 'https://discord.com/api/webhooks/1444881923909619712/rrsDVZbrvQxBYnNPrsWP2wLBpAOxZxvi4QTwDIoJyof_bZWP-TrO_so9z0ehii2qSIUP';
+
+        function sendMessage() {
+            const message = document.getElementById('message').value;
+            const responseElement = document.getElementById('response');
+            
+            if (!message) {
+                responseElement.innerText = "Please enter a message.";
+                responseElement.style.color = "red";
+                return;
+            }
+            
+            const data = {
+                content: message
+            };
+
+            fetch(webhookUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => response.json())
+            .then(data => {
+                responseElement.innerText = "Message sent successfully!";
+                responseElement.style.color = "green";
+                document.getElementById('message').value = '';  // Clear the input field
+            })
+            .catch(error => {
+                responseElement.innerText = "An error occurred. Please try again.";
+                responseElement.style.color = "red";
+                console.error("Error:", error);
+            });
+        }
+    </script>
+
+</body>
+</html>
